@@ -21,13 +21,21 @@ from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.interface import implementer
+from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces import NotFound
 
 try:
+    # Archetypes installed
     from Products.ATContentTypes.interfaces.factory import IFactoryTool
 except ImportError:
-    from Products.CMFPlone.interfaces.factory import IFactoryTool
+    try:
+        # Plone 5.0 without Archetypes
+        from Products.CMFPlone.interfaces.factory import IFactoryTool
+    except ImportError:
+        # Plone 5.1 without Archetypes
+        class IFactoryTool(Interface):
+            pass
 
 
 @implementer(IPublishTraverse)
